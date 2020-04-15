@@ -384,6 +384,7 @@ summariseStartle <- function(df, method = "wilcox.test"){
     p1 <- df %>%
       group_by(stage, impulse, lgroup) %>%
       summarise(mean(value), sd(value), min(value), median(value),  IQR(value), max(value))
+
     df  <- data.frame(df %>% group_by(stage, order, impulse, impulsetype, group, lgroup) %>% summarise(median = median(value)) %>% ungroup())
     df <- df %>% mutate(gr = paste(group, order))
     df <- df %>% filter(impulse == "I") %>%
@@ -391,12 +392,12 @@ summariseStartle <- function(df, method = "wilcox.test"){
       mutate(ratio = median.x / median.y) %>%
       select(stage, order, impulse, impulsetype, group, lgroup, gr, ratio) %>%
       mutate(lgit = paste(lgroup, impulsetype))
-    p2 <- compare_means(ratio ~ lgit,  data = df, method = method)
+    p2 <- df %>%
+      group_by(stage, lgroup) %>%
+      summarise(mean(ratio), sd(ratio), min(ratio), median(ratio),  IQR(ratio), max(ratio))
+    p3 <- compare_means(ratio ~ lgit,  data = df, method = method)
 
-    print(p1)
-    print(p2)
-
-    return(list("T1" = p1, "T2" = p2))
+    return(list("Values" = p1, "Ratio" = p2, "RatioS" = p3))
 
 }
 
