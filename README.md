@@ -7,6 +7,12 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.com/ikodvanj/ratPASTA.svg?branch=master)](https://travis-ci.com/ikodvanj/ratPASTA)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/ikodvanj/ratPASTA?branch=master&svg=true)](https://ci.appveyor.com/project/ikodvanj/ratPASTA)
+[![Codecov test
+coverage](https://codecov.io/gh/ikodvanj/ratPASTA/branch/master/graph/badge.svg)](https://codecov.io/gh/ikodvanj/ratPASTA?branch=master)
 <!-- badges: end -->
 
 ratPASTA is a package used for processing and visualising data from
