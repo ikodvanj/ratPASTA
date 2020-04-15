@@ -1,0 +1,150 @@
+---
+title: "ratPASTA - R-based Awesome Toolbox for Platform for Acoustic STArtle"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ratPASTA - R-based Awesome Toolbox for Platform for Acoustic STArtle}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Loading the data
+
+Load the package with the following code:
+
+```{r setup}
+library(ratPASTA)
+
+```
+
+The `loadStartleData()` function will load all .pasta files from the working directory, merge them and identify impulses with built-in metadata. Navigate to a folder with all pasta files and run the following command:
+
+``` 
+df <- loadStartleData(addhead = 0.5, addtail = 0.5)
+```
+The specified addtail and addhead arguments take into account the the latency of the animal (**Figure 1** explains this concept). 
+Additionally, this function will also correct the values for the weight of the animals, based on the `mass.json` file in the working directory.
+
+Alternatively, data can be loaded by specifying the names of all pasta files. To do so, set `local_import` argument to `FALSE` and specify `group_names` as a vector of strings (it doesn't matter whether strings contain .pasta extension).
+
+``` 
+df <- loadStartleData(local_import = FALSE, group_names = c("ctr p1", "ctr p2"))
+```
+
+
+![**Figure 1. An illustration of the startle experiment.** One cycle is the period from the start of the one startling sound - addhead time, till the next startling sound - addhead. Latency of the animal is measured from the startling sound till the maximum value. Values that fall within the period from (impulse start time - addhead) to (impulse end time + addtail) are binned in the I (impulse) category. Other values are a part of No I category (No impulse = between two impulses)](Startle.png){#id .class width=100% height=100%}
+
+
+```{r loadData, echo = FALSE, results = FALSE, include = FALSE}
+df <- readRDS("data.RDS")
+
+```
+
+
+
+
+## Summary
+
+The function `summariseStartle()` is used to return a mathematical summary of the startle data. 
+
+```{r summary}
+summariseStartle(df)
+
+```
+
+
+## Plotting graphs
+
+#### Basic plot
+
+The following functions, `startlePlot()` and `basicStartlePlot`, are used for visualisation of results.
+
+```{r plot1, fig.height = 9}
+basicStartlePlot(df, n_col = 3)
+
+
+```
+
+`filter_groups` argument can be used to display the data only for one or several animals.  
+
+```{r plot1.2}
+basicStartlePlot(df, filter_groups = "ctr 5")
+
+
+```
+
+
+#### Startle plot
+
+The following plot shows mean absolute values for each cycle (during impuls (I), and in between impulse (NO I)). Color indicates whether the preimpulse was used or not. Animal groups are ctr and stz (control and streptozotocin treated rats).
+
+```{r plot2}
+startlePlot(df, type = 1)
+
+
+```
+
+
+This graph uses the same input values as the last one. The only difference is the method of visualisation. In the last one points were used to indicate mean values, in this one boxplots are used.
+
+```{r plot3}
+startlePlot(df, type = 2)
+
+
+```
+
+This following graph is the same as the last one, but in this case, only the data pertaining to the pulses is displayed. 
+
+```{r plot4}
+startlePlot(df, type = 3)
+
+
+```
+
+
+
+The following plot shows the distribution of the activity of the animals. 
+
+```{r plot5}
+startlePlot(df, type = 4)
+
+
+```
+
+To make this "violin" shaped plots even more informative, we added a dot representing median value and quantile lines.
+
+#### Latency plot
+
+A `latencyPlot()` function returns a list with two plots, one displaying the latency vs animal groups, and the other latency vs cycle. The only obligatory argument is a data frame created with `loadStartleData()` function. If argument `addhead` is used in the `loadStartleData()` function, then it should be defined in `latencyPlot()` function as well with the same value.
+
+This function is a work in progress. It has been added to the package, and it should work properly. However, the test data used as an example for this vignette is preliminary data used and the starting time of each cycle is off. This displacement is variable and is a result of the interaction between software and hardware through the sound server PulseAudio and the Linux audio subsystem, ALSA. We are working on a fix for this. However, for the demonstrative purposes, we will run the `latencyPlot()` function on this faulty data. 
+
+
+```{r list}
+l <- latencyPlot(df)
+
+
+```
+
+List `l` now contains two plots. To view them, use the following code:
+
+```{r printList}
+print(l$LatencyVsCycle)
+print(l$LatencyVsGroup)
+
+```
+
+By default, we don't expect latency to be greater than 1000ms, thus graphs show only values between 1 and 1000 ms. However if you want to change this you can do so with the following code: `print(l$LatencyVsCycle + ggplot2::scale_y_continuous(limits = c(0, 500000)))`, or even better: `print(l$LatencyVsCycle + ggplot2::coord_cartesian(ylim = c(0, 500000)))` . 
+
+In general, all graphs can be modified since all are ggplot objects.
+
+## Development
+
+This package and complete PASTA solution we served you is something new and will be updated in the future. You could say that something is always cooking... We hope you will enjoy our pasta. However, if something is eating you about this package, please inform us so we can improve our recipe.
+

@@ -1,0 +1,20 @@
+citHeader("To cite ratPASTA in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "Repurposing a digital kitchen scale for neuroscience research: a complete hardware and software cookbook for PASTA",
+  author   = personList(as.person( "Davor Virag"),
+		                    as.person( "Jan Homolak"),
+                  		  as.person( "Ivan Kodvanj"),
+                  		  as.person( "Ana Babic Perhoc"),
+                        as.person( "Ana Knezovic"),
+                        as.person( "Jelena Osmanovic Barilar"),
+                        as.person( "Melita Salkovic-Petrisic")),
+  journal  = "BioRxiv",
+  year     = "2020",
+  doi      = "10.1101/2020.04.10.035766",
+  url      = "https://www.biorxiv.org/content/10.1101/2020.04.10.035766v1",
+  textVersion = paste(
+  "Virag, D., Homolak, J., Kodvanj, I., Babic Perhoc, A., Knezovic, A., Osmanovic Barilar, J., & Salkovic-Petrisic, M. (2020). Repurposing a digital kitchen scale for neuroscience research: a complete hardware and software cookbook for PASTA. BioRxiv, 2020.04.10.035766. https://doi.org/10.1101/2020.04.10.035766"
+  )
+)
