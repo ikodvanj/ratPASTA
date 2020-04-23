@@ -31,10 +31,10 @@ df <- loadStartleData(addhead = 0.5, addtail = 0.5)
 The specified addtail and addhead arguments take into account the the latency of the animal (**Figure 1** explains this concept). 
 Additionally, this function will also correct the values for the weight of the animals, based on the `mass.json` file in the working directory.
 
-Alternatively, data can be loaded by specifying the names of all pasta files. To do so, set `local_import` argument to `FALSE` and specify `group_names` as a vector of strings (it doesn't matter whether strings contain .pasta extension).
+Alternatively, data can be loaded by specifying the names of all pasta files. To do so, set `auto_import` argument to `FALSE` and specify `data` as a list containing all pasta data. To do so, manualy import all .pasta files as csv files, place them in a list. Each element should have the same name as the csv. 
 
 ``` 
-df <- loadStartleData(local_import = FALSE, group_names = c("ctr p1", "ctr p2"))
+df <- loadStartleData(auto_import = FALSE, data = list)
 ```
 
 
@@ -61,9 +61,11 @@ summariseStartle(df)
 
 ## Plotting graphs
 
+The following functions, `startlePlot()` and `basicStartlePlot()`, are used for visualisation of results.
+
 #### Basic plot
 
-The following functions, `startlePlot()` and `basicStartlePlot`, are used for visualisation of results.
+Function `basicStartlePlot()` returns time-series plot:
 
 ```{r plot1, fig.height = 9}
 basicStartlePlot(df, n_col = 3)
@@ -106,7 +108,6 @@ startlePlot(df, type = 3)
 
 
 ```
-
 
 
 The following plot shows the distribution of the activity of the animals. 

@@ -18,8 +18,9 @@ A mathematical summary in a list.
 Returns a mathematical summary of the startle data. Returned list with two data frames. First contains calculated median, interquartile range, mean and standard deviation for values pertaining to the period of the pulse and in between pulses. The second contains the results of the desired statistical test, by default Wilcox is used. User can specify which test will be used with method argument.
 }
 \examples{
-\dontrun{
-## df is created with loadStartleData function
+# Load example data
+df <- ratpasta_demo
+
+# running examples
 summariseStartle(df)
-}
 }

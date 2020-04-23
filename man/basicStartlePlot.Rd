@@ -20,8 +20,10 @@ Returns a time series plot.
 Returns a simple time series plot.
 }
 \examples{
-\dontrun{
-## df is created with loadStartleData function
+# Load example data
+df <- ratpasta_demo
+
+# running basicStartlePlot
 basicStartlePlot(df)
-}
+
 }

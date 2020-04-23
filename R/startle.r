@@ -1,8 +1,9 @@
 #' @title Load Startle Data
 #' @description This function is used for loading and processing all data related to startle experiments. All data generated with PASTA, Platform for Acoustic STArle experiments, should be placed in a single folder. Navigate to this folder, set it as working directory, and call this function. All data will be loaded, processed and assigned to a chosen variable that can be passed on other functions.
 #'
-#' @param local_import An argument with default value TRUE. If set to TRUE it will load all .pasta files from the working directory and merge them apropriately. If set to FALSE, a user must specify group_names.
-#' @param group_names An argument used only if local_import = FALSE. A vector of strings with names of .pasta files pertaining to startle data.
+#' @param auto_import An argument with default value TRUE. If set to TRUE it will load all .pasta files from the working directory and merge them apropriately. If set to FALSE, a user must specify group_names.
+#' @param data An argument used only if auto_import = FALSE. A list. A list containing data frames with data from .pasta files.
+#' @param mass An argument used only if auto_import = FALSE. A dataframe, in first column are names of animals, second their mass. Names in first column must correspond to the names of the elements in list used as an data argument.
 #' @param addhead Optional argument. Adds a number of seconds to the duration of the impulse. Acounts for the lag of the animal.
 #' @param addtail Optional argument. Adds a number of seconds to the duration of the impulse. Acounts for the lag of the animal.
 #' @param metadata Optional argument. For a custom made pulse protocol.
@@ -22,12 +23,17 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df <- loadStartleData(df, addhead = 0.2, addtail = 0.2)
-#' # OR
-#' df <- loadStartleData(local_import=FALSE, group_names=c("ctr 1", "ctr 2"), addhead=0.1, addtail=1)
-#' }
-loadStartleData <- function(local_import = TRUE, group_names,  addhead, addtail, metadata, correction = TRUE, synchronise = FALSE){
+#' # Creating random experiment data
+#' data <- list("CTR 1" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)),
+#'              "CTR 2" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)),
+#'              "EXP 1" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)),
+#'              "EXP 2" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)))
+#' mass <- data.frame("group" = c("CTR 1", "CTR 2", "EXP 1", "EXP 2"), "mass" = c(300, 350, 280, 330))
+#'
+#' # Running an example of loadStartleData with auto_import set to FALSE
+#' df <- loadStartleData(auto_import=FALSE, data = data, mass = mass, addhead=0.1, addtail=1)
+#'
+loadStartleData <- function(auto_import = TRUE, data, mass, addhead, addtail, metadata, correction = TRUE, synchronise = FALSE){
 
   if(missing(addhead)){
     addhead <- 0
@@ -40,29 +46,15 @@ loadStartleData <- function(local_import = TRUE, group_names,  addhead, addtail,
     metadata <-  map
   }
 
-  if (local_import == FALSE){
-
-    if(missing(group_names)){
-      stop("Group names are missing. If local_import = FALSE, group_names are obligatory argument")
+  if (auto_import == FALSE){
+    if (missing(data)){
+      stop("Data was not provided.")
     }
-
-    group_names <- group_names %>% str_replace(".pasta", "")
-
-    df <- data.frame()
-    c <- c()
-    for(i in group_names){
-      i <- paste(i, ".pasta", sep = "")
-
-      c <- c(c,i)
-
-    }
-
-    l <- lapply(c, read.csv)
-
+    l <- data
+    group_names <- names(l)
   }
 
-
-  if(local_import == TRUE){
+  if(auto_import == TRUE){
     group_names <- list.files(pattern="*.pasta")
     l <- lapply(group_names, read.csv)
   }
@@ -167,24 +159,32 @@ loadStartleData <- function(local_import = TRUE, group_names,  addhead, addtail,
 
   ## correction for mass
   if(correction == TRUE){
-
-    list.json.files <- list.files(pattern="*.json")
-
-    if("mass.json" %in% list.json.files){
-      mass_correction <- as.data.frame(fromJSON(file = "mass.json"))
-      mass_correction <- gather(mass_correction, group, mass)
-      mass_correction <- mass_correction %>%
-        mutate(correction_factor = mass / mean(mass_correction$mass)) %>%
-        mutate(group = gsub(".",  " ", group, fixed = TRUE)) %>%
-        select(group, correction_factor)
-
-      df <- df %>%
-        left_join(mass_correction, by = "group") %>%
-        mutate(value = value / correction_factor) %>%
-        select(-correction_factor)
+    if (auto_import == FALSE){
+      if (missing(mass)){
+        stop("Mass was not provided.")
+      }
+      mass_correction <- mass
     } else {
-      warning("File mass.json is missing from the working directory. Correction for mass was not conducted.")
+      list.json.files <- list.files(pattern="*.json")
+
+      if("mass.json" %in% list.json.files){
+        mass_correction <- as.data.frame(fromJSON(file = "mass.json"))
+        mass_correction <- gather(mass_correction, group, mass) %>%
+          mutate(group = gsub(".",  " ", group, fixed = TRUE))
+      } else {
+        stop("File mass.json is missing from the working directory. Correction for mass was not conducted.")
+      }
     }
+
+    mass_correction <- mass_correction %>%
+      mutate(correction_factor = mass / mean(mass_correction$mass)) %>%
+      select(group, correction_factor) %>%
+      mutate(group = tolower(group))
+
+    df <- df %>%
+      left_join(mass_correction, by = "group") %>%
+      mutate(value = value / correction_factor) %>%
+      select(-correction_factor)
 
   }
 
@@ -210,10 +210,12 @@ loadStartleData <- function(local_import = TRUE, group_names,  addhead, addtail,
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' ## df is created with loadStartleData function
+#' # Load example data
+#' df <- ratpasta_demo
+#'
+#' # running basicStartlePlot
 #' basicStartlePlot(df)
-#' }
+#'
 basicStartlePlot <- function(df, filter_groups, n_col){
 
   if(!missing(filter_groups)){
@@ -251,11 +253,13 @@ basicStartlePlot <- function(df, filter_groups, n_col){
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' ## df is created with loadStartleData function
-#' startlePlot(df, type = 1)
-#' }
+#' # Load example data
+#' df <- ratpasta_demo
 #'
+#' # running examples
+#' startlePlot(df, type = 1)
+#' startlePlot(df, type = 2)
+#' startlePlot(df, type = 3)
 startlePlot <- function(df, type, filter_major_groups, yrange, n_col){
 
   if(!missing(filter_major_groups)){
@@ -376,10 +380,11 @@ startlePlot <- function(df, type, filter_major_groups, yrange, n_col){
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' ## df is created with loadStartleData function
+#' # Load example data
+#' df <- ratpasta_demo
+#'
+#' # running examples
 #' summariseStartle(df)
-#' }
 summariseStartle <- function(df, method = "wilcox.test"){
     p1 <- df %>%
       group_by(stage, impulse, lgroup) %>%
@@ -423,11 +428,11 @@ summariseStartle <- function(df, method = "wilcox.test"){
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' ## df is created with loadStartleData function
-#' L <- latencyPlot(df, addhead = 0.2)
-#' }
+#' # Load data provided with example
+#' df <- ratpasta_demo
 #'
+#' # running examples
+#' l <- latencyPlot(df, addhead = 0.1)
 latencyPlot <- function(df, addhead){
   if (!missing(addhead)){
     df$time2 <- df$time2 - addhead * 1000
@@ -489,5 +494,8 @@ utils::globalVariables(c("group", "time", "value", "read",
 #' @format dataframe
 "map"
 
-
+#' @title Sample
+#' @description A sample data for example. A small part of data used in vignette.
+#' @format dataframe
+"ratpasta_demo"
 

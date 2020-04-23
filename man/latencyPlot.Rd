@@ -18,9 +18,9 @@ List with two plots
 Returns two plots displaying latency in a list. Latency refers to the reaction of the test subject to the startling sound. It is time period from the startling sound to the time stamp of maximal values recorded.
 }
 \examples{
-\dontrun{
-## df is created with loadStartleData function
-L <- latencyPlot(df, addhead = 0.2)
-}
+# Load data provided with example
+df <- ratpasta_demo
 
+# running examples
+l <- latencyPlot(df, addhead = 0.1)
 }

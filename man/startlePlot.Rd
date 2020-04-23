@@ -24,9 +24,11 @@ Returns several types of plots based on type.
 Returns several types of plots, based on the type argument. Type 1 returns a dot plot portraying mean values during the pulse and between pulses for tested groups; type 2, returns a similar result as type 1, but as a boxplot; type 3 displays only values pertaining to pulse period; type 4 displays distribution of values as violin plots; type 5 is a time-series plot with all startle tries overlapped, color indicates whether prepulse was used; type 6 is a boxplot displaying ratio of values recorded during pulse and in between pulses.
 }
 \examples{
-\dontrun{
-## df is created with loadStartleData function
-startlePlot(df, type = 1)
-}
+# Load example data
+df <- ratpasta_demo
 
+# running examples
+startlePlot(df, type = 1)
+startlePlot(df, type = 2)
+startlePlot(df, type = 3)
 }

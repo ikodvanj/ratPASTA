@@ -5,8 +5,9 @@
 \title{Load Startle Data}
 \usage{
 loadStartleData(
-  local_import = TRUE,
-  group_names,
+  auto_import = TRUE,
+  data,
+  mass,
   addhead,
   addtail,
   metadata,
@@ -15,9 +16,11 @@ loadStartleData(
 )
 }
 \arguments{
-\item{local_import}{An argument with default value TRUE. If set to TRUE it will load all .pasta files from the working directory and merge them apropriately. If set to FALSE, a user must specify group_names.}
+\item{auto_import}{An argument with default value TRUE. If set to TRUE it will load all .pasta files from the working directory and merge them apropriately. If set to FALSE, a user must specify group_names.}
 
-\item{group_names}{An argument used only if local_import = FALSE. A vector of strings with names of .pasta files pertaining to startle data.}
+\item{data}{An argument used only if auto_import = FALSE. A list. A list containing data frames with data from .pasta files.}
+
+\item{mass}{An argument used only if auto_import = FALSE. A dataframe, in first column are names of animals, second their mass. Names in first column must correspond to the names of the elements in list used as an data argument.}
 
 \item{addhead}{Optional argument. Adds a number of seconds to the duration of the impulse. Acounts for the lag of the animal.}
 
@@ -36,9 +39,14 @@ A dataframe with all startle data
 This function is used for loading and processing all data related to startle experiments. All data generated with PASTA, Platform for Acoustic STArle experiments, should be placed in a single folder. Navigate to this folder, set it as working directory, and call this function. All data will be loaded, processed and assigned to a chosen variable that can be passed on other functions.
 }
 \examples{
-\dontrun{
-df <- loadStartleData(df, addhead = 0.2, addtail = 0.2)
-# OR
-df <- loadStartleData(local_import=FALSE, group_names=c("ctr 1", "ctr 2"), addhead=0.1, addtail=1)
-}
+# Creating random experiment data
+data <- list("CTR 1" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)),
+             "CTR 2" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)),
+             "EXP 1" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)),
+             "EXP 2" = data.frame(x = seq(1, 210881, by=12), y = runif(17574, min=-30, max=30)))
+mass <- data.frame("group" = c("CTR 1", "CTR 2", "EXP 1", "EXP 2"), "mass" = c(300, 350, 280, 330))
+
+# Running an example of loadStartleData with auto_import set to FALSE
+df <- loadStartleData(auto_import=FALSE, data = data, mass = mass, addhead=0.1, addtail=1)
+
 }
