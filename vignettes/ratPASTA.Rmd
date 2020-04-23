@@ -31,10 +31,10 @@ df <- loadStartleData(addhead = 0.5, addtail = 0.5)
 The specified addtail and addhead arguments take into account the the latency of the animal (**Figure 1** explains this concept). 
 Additionally, this function will also correct the values for the weight of the animals, based on the `mass.json` file in the working directory.
 
-Alternatively, data can be loaded by specifying the names of all pasta files. To do so, set `auto_import` argument to `FALSE` and specify `data` as a list containing all pasta data. To do so, manualy import all .pasta files as csv files, place them in a list. Each element should have the same name as the csv. 
+Alternatively, data can be loaded by specifying the names of all pasta files. To do so, set `auto_import` argument to `FALSE` and specify `data` as a list containing all pasta data. To do so, manualy import all .pasta files as csv files, place them in a list. Unless `correction = FALSE`, mass should be provided as well.
 
 ``` 
-df <- loadStartleData(auto_import = FALSE, data = list)
+df <- loadStartleData(auto_import = FALSE, data = list, mass = mass)
 ```
 
 
