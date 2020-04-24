@@ -14,10 +14,17 @@ test_that("Testing output of basicStartlePlot", {
 
   bpl <- basicStartlePlot(df, filter_groups = c("ctr 1", "ctr 2"), n_col = 2)
 
-  bpl <- layer_data(bpl)
+  bpl_ld <- layer_data(bpl)
 
-  expect_equal(bpl, readRDS("bpl.rds"))
+  bple_lde <- readRDS("bpl.rds")
 
+  n<- intersect(names(bpl_ld), names(bple_lde))
+
+  bpl_ld<- bpl_ld[,n]
+  bple_lde<- bple_lde[,n]
+
+  expect_is(bpl, "ggplot")
+  expect_equal(bpl_ld, bple_lde)
 
 })
 
