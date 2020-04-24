@@ -12,7 +12,9 @@ test_that("Testing output of basicStartlePlot", {
 
   df <- loadStartleData(auto_import=FALSE, data = data, mass = mass)
 
-  bpl <- basicStartlePlot(df, filter_groups = "ctr", n_col = 1)
+  bpl <- basicStartlePlot(df, filter_groups = c("ctr 1", "ctr 2"), n_col = 2)
+
+  bpl <- layer_data(bpl)
 
   expect_equal(bpl, readRDS("bpl.rds"))
 
