@@ -4,7 +4,6 @@ language: R
 sudo: false
 cache: packages
 warnings_are_errors: true
-R -e 'install.packages("knitr")'
 
 os:
   - linux
@@ -13,9 +12,6 @@ os:
 r:
   - oldrel
   - release
-
-install:
-  - Rscript -e 'install.packages("knitr")'
 
 after_success:
   - Rscript -e 'covr::codecov(type = "all")'
