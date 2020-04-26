@@ -2,7 +2,6 @@
 
 language: R
 sudo: false
-cache: packages
 warnings_are_errors: true
 
 os:
@@ -12,6 +11,10 @@ os:
 r:
   - oldrel
   - release
+
+install:
+  - R -e 'install.packages("devtools")'
+  - R -e 'devtools::install_deps(dep = T)'
 
 after_success:
   - Rscript -e 'covr::codecov(type = "all")'
