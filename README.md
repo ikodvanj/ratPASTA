@@ -13,6 +13,8 @@ status](https://travis-ci.com/ikodvanj/ratPASTA.svg?branch=master)](https://trav
 status](https://ci.appveyor.com/api/projects/status/github/ikodvanj/ratPASTA?branch=master&svg=true)](https://ci.appveyor.com/project/ikodvanj/ratPASTA)
 [![Codecov test
 coverage](https://codecov.io/gh/ikodvanj/ratPASTA/branch/master/graph/badge.svg)](https://codecov.io/gh/ikodvanj/ratPASTA?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ratPASTA)](https://CRAN.R-project.org/package=ratPASTA)
 <!-- badges: end -->
 
 ratPASTA is a package used for processing and visualising data from
@@ -31,7 +33,13 @@ preprint](https://www.biorxiv.org/content/10.1101/2020.04.10.035766v1)
 
 ## Installation
 
-Install ratPASTA from Github:
+Install ratPASTA from CRAN:
+
+``` r
+install.packages("ratPASTA")
+```
+
+…or install ratPASTA from Github:
 
 ``` r
 install_github("ikodvanj/ratPASTA")
