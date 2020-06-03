@@ -4,7 +4,7 @@ test_that("Testing automated data loading", {
 
   df <- loadStartleData(correction = FALSE)
 
-  expect_equal(df, readRDS("results1.rds"))
+  expect_equal(df, readRDS("results1.rds"), check.attributes = FALSE)
 
 })
 
