@@ -10,3 +10,4 @@ docs/
 /cache/
 pkgdown/
 **/.DS_Store
+.ipynb_checkpoints

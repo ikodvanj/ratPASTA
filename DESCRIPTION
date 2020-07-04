@@ -1,7 +1,7 @@
 Package: ratPASTA
 Type: Package
 Title: Processing Acoustic Startle Experimental Data
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person(given = "Ivan",
                     family = "Kodvanj",
                     role = c("aut", "cre"),
@@ -28,7 +28,7 @@ Description: Used for processing data obtained from behaviour experiments studyi
     measurements and visualize the results. The PASTA solution and this package
     are described in Virag et al. (2020) <doi:10.1101/2020.04.10.035766>.
 Depends:
-  R (>= 2.10)
+  R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
