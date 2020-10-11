@@ -4,10 +4,10 @@
 \alias{griPASTA}
 \title{griPASTA main function}
 \usage{
-griPASTA(raw, usePlotly = TRUE)
+griPASTA(data, usePlotly = TRUE)
 }
 \arguments{
-\item{raw}{Raw griPASTA data loaded with function loadgriPASTA or manually.}
+\item{data}{Raw griPASTA data loaded with function loadgriPASTA or manually.}
 
 \item{usePlotly}{TRUE or FALSE argument. If set to TRUE, plotly will be used to render plot for each animal.}
 }

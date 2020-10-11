@@ -1,0 +1,33 @@
+---
+title: "griPASTA"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{griPASTA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In version 0.2.0 we have added functions for analysing grip strength in rodents with DIY device based on PASTA platform. 
+
+User can load data using the `loadgriPASTA()` function (or with a custom script; `loadgriPASTA()` loads all .pasta files in the working directory and saves it as a list, naming the elements of the list with file names)
+
+```
+library(ratPASTA)
+data <- loadgriPASTA()
+```
+
+To analyse peak force a rodent can resist, the user should run griPASTA() function and specify loaded data as an argument of the function. This will plot time-series data as a line plot for each animal. User will be prompted to identify the artefacts in each plot, and finally count the number of trials (excluding the artefacts), and estimate the duration of each trial. The output of the function is saved as a data frame. 
+
+```
+results <- griPASTA(data)
+```
+
+
+

@@ -28,7 +28,10 @@ loadgriPASTA <- function(){
 #' @return returns values of peaks
 #' @importFrom dplyr arrange
 #' @export
-#'
+#' @example
+#' \dontrun{
+#' findPeaks(df, n, range)
+#' }
 findPeaks <- function(df, n, range){
   colnames(df) <-  c("time", "value")
   df$row <- seq(1, nrow(df), 1)
@@ -107,22 +110,28 @@ errors <- function(df, usePlotly){
 #' @title griPASTA main function
 #' @description A function that takes in raw griPASTA data and behaves similar to a loop - continuously promts user exclude artifacts until no artifacts are present. If artifact is present, user is promted to enter starting and ending x coordinate of the artefact, and artefact is deleted.
 #'
-#' @param raw Raw griPASTA data loaded with function loadgriPASTA or manually.
+#' @param data Raw griPASTA data loaded with function loadgriPASTA or manually.
 #' @param usePlotly TRUE or FALSE argument. If set to TRUE, plotly will be used to render plot for each animal.
 #'
 #' @return Returns measurements for each animal
 #' @importFrom dplyr bind_rows mutate
 #'
 #' @export
-griPASTA <- function(raw, usePlotly = TRUE){
+#'
+#' @example
+#' \dontrun{
+#' # data - imported with loadgriPASTA
+#' findPeaks(data, usePlotly)
+#' }
+griPASTA <- function(data, usePlotly = TRUE){
 
 
   df_final <- data.frame(time = NA, value = NA, animal = NA)
 
-  for(i in 1:length(raw)){
+  for(i in 1:length(data)){
 
-    name <- names(raw)[i]
-    df <- raw[[i]]
+    name <- names(data)[i]
+    df <- data[[i]]
     message("New experiment.")
 
     df <- errors(df, usePlotly = usePlotly)

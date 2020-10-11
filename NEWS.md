@@ -1,3 +1,8 @@
+# ratPASTA 0.2.0
+
+* Added function for analysing grip strength in rodents 
+
+
 # ratPASTA 0.1.2
 
 * Changed R version dependency 
