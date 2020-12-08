@@ -8,9 +8,9 @@
 loadgriPASTA <- function(){
 
 
-  group_names <- list.files(pattern="*pasta")
+  group_names <- list.files(pattern="\\.pasta$")
   l <- lapply(group_names, read.csv)
-  names(l) <- str_remove(list.files(pattern="*pasta"), ".pasta")
+  names(l) <- str_remove(list.files(pattern="\\.pasta$"), ".pasta")
 
   return(l)
 

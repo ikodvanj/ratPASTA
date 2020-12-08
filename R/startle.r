@@ -55,7 +55,7 @@ loadStartleData <- function(auto_import = TRUE, data, mass, addhead, addtail, me
   }
 
   if(auto_import == TRUE){
-    group_names <- list.files(pattern="*.pasta")
+    group_names <- list.files(pattern="\\.pasta$")
     l <- lapply(group_names, read.csv)
   }
 
@@ -165,7 +165,7 @@ loadStartleData <- function(auto_import = TRUE, data, mass, addhead, addtail, me
       }
       mass_correction <- mass
     } else {
-      list.json.files <- list.files(pattern="*.json")
+      list.json.files <- list.files(pattern="\\.json$")
 
       if("mass.json" %in% list.json.files){
         mass_correction <- as.data.frame(fromJSON(file = "mass.json"))
