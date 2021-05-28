@@ -12,7 +12,7 @@ test_that("Testing correction true", {
 
   df_withcorrection <- loadStartleData(correction = TRUE)
 
-  expect_equal(df_withcorrection, readRDS("results2.rds"))
+  expect_equal(df_withcorrection, readRDS("results2.rds"), check.attributes = FALSE)
 
 })
 
@@ -21,7 +21,7 @@ test_that("Testing correction true addtail and addhead", {
 
   df_wcor_tailhead <- loadStartleData(correction = TRUE, addtail = 0.5, addhead = 0.5)
 
-  expect_equal(df_wcor_tailhead, readRDS("results3.rds"))
+  expect_equal(df_wcor_tailhead, readRDS("results3.rds"), check.attributes = FALSE)
 
 })
 
@@ -36,7 +36,7 @@ test_that("Auto import false", {
 
   df_no_auto_import <- loadStartleData(auto_import=FALSE, data = data, mass = mass)
 
-  expect_equal(df_no_auto_import, readRDS("results4.rds"))
+  expect_equal(df_no_auto_import, readRDS("results4.rds"), check.attributes = FALSE)
 
 
 })
